@@ -3,6 +3,7 @@ package com.todolist.backend.service;
 import org.springframework.stereotype.Service;
 
 import com.todolist.backend.model.dto.CreateUserRequest;
+import com.todolist.backend.model.dto.UserInfoResponse;
 import com.todolist.backend.model.entity.MyUser;
 import com.todolist.backend.repository.MyUserRepository;
 
@@ -36,6 +37,17 @@ public class MyUserService {
             throw new RuntimeException("Email duplicated");
         }
 
+    }
+
+    public UserInfoResponse getMyInfo(String email) {
+        MyUser user = myUserRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return UserInfoResponse
+                .builder()
+                .fullname(user.getFullname())
+                .email(user.getFullname())
+                .id(user.getId())
+                .build();
     }
 
 }

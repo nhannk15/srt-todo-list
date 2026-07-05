@@ -38,6 +38,9 @@ public class MyUser {
     @Column(name = "googleId")
     private String googleId;
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Task> tasks;
 
