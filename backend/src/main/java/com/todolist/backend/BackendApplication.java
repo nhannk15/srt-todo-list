@@ -20,21 +20,21 @@ public class BackendApplication {
     @Bean
     public CommandLineRunner commandLineRunner(MyUserRepository myUserRepository, TaskRepository taskRepository) {
         return args -> {
-            MyUser newUser = MyUser
-                    .builder()
-                    .fullname("Nguyen Khac Le Nhan")
-                    .email("nhannk15@gmail.com")
-                    .googleId("googleId")
-                    .build();
-            myUserRepository.save(newUser);
+            // MyUser newUser = MyUser
+            //         .builder()
+            //         .fullname("Nguyen Khac Le Nhan")
+            //         .email("nhannk15@gmail.com")
+            //         .googleId("googleId")
+            //         .build();
+            // myUserRepository.save(newUser);
 
-            Task newTask = Task
-                    .builder()
-                    .title("Study Java")
-                    .description("Study Java Spring Framework")
-                    .user(newUser)
-                    .build();
-            taskRepository.save(newTask);
+            // Task newTask = Task
+            //         .builder()
+            //         .title("Study Java")
+            //         .description("Study Java Spring Framework")
+            //         .user(newUser)
+            //         .build();
+            // taskRepository.save(newTask);
         };
     }
 
