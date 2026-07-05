@@ -13,10 +13,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Entity
 @Table(name = "tbl_tasks")
 @NoArgsConstructor
@@ -47,12 +49,17 @@ public class Task {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "done_at")
+    private LocalDateTime doneAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private MyUser user;
 
     @PrePersist
     public void onCreate() {
+        this.isDone = false;
         this.createdAt = LocalDateTime.now();
+        this.isActive = true;
     }
 }
