@@ -33,7 +33,7 @@ public class MyUser {
     @Column(name = "googleId")
     private String googleId;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Task> tasks;
 
 }
