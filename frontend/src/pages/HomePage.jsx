@@ -144,10 +144,15 @@ const HomePage = () => {
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer, textAlign: "center", fontSize: "23px" }}>
-                    To-do List
-                    <Button onClick={handleLogout}>
-                        Logout
-                    </Button>
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                        <div style={{marginLeft: "15px"}}>
+                            Welcome {user == null ? "" : user.fullname}
+                        </div>
+                        <Button onClick={handleLogout}>
+                            Logout
+                        </Button>
+                    </div>
+
                 </Header>
                 <Content style={{ margin: '0 16px' }}>
                     <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'User' }, { title: 'To do list' }]} />
@@ -160,7 +165,7 @@ const HomePage = () => {
                         }}
                     >
                         <div>
-                            <Outlet context={{reloadTrigger}}/>
+                            <Outlet context={{ reloadTrigger }} />
                         </div>
                     </div>
                 </Content>
