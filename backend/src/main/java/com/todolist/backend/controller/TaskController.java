@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,14 +30,24 @@ public class TaskController {
     }
 
     @PostMapping("/api/tasks")
-    public ResponseEntity<Void> createNewTask(@RequestBody CreateTaskRequest request) {
-        taskService.createNewTask(request);
+    public ResponseEntity<Void> createNewTask(@AuthenticationPrincipal String email, @RequestBody CreateTaskRequest request) {
+        taskService.createNewTask(email, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/api/tasks")
-    public ResponseEntity<List<TaskResponse>> getUndoneAllTasks(@RequestBody String email) {
+    @GetMapping("/api/undone-tasks")
+    public ResponseEntity<List<TaskResponse>> getUndoneAllTasks(@AuthenticationPrincipal String email) {
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllUserUndoneTasks(email));
+    }
+
+    @GetMapping("/api/tasks")
+    public ResponseEntity<List<TaskResponse>> getAllTasks(@AuthenticationPrincipal String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(email));
+    }
+
+    @GetMapping("/api/done-tasks")
+    public ResponseEntity<List<TaskResponse>> getDoneAllTasks(@AuthenticationPrincipal String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllUserDoneTasks(email));
     }
 
     public record MarkAsDoneRequest(Long taskId) {
