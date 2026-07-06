@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { Button, Form, Input, Modal, Radio, Space, Table, Tag } from 'antd';
-import { deleteTask, getAllTasks, getUndoneTasks, updateTask } from '../service/taskService';
+import { deleteTask, getAllTasks, getUndoneTasks, markTaskAsDone, updateTask } from '../service/taskService';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
+import { useOutletContext } from 'react-router';
 
 const validationSchema = Yup.object({
     title: Yup.string()
@@ -25,6 +26,7 @@ export default function AllTasks() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState({});
+    const { reloadTrigger } = useOutletContext();
     const formik = useFormik({
         initialValues: {
             title: selectedTask.title,
@@ -62,6 +64,20 @@ export default function AllTasks() {
             console.log(`Task with ID ${id} udpated successfully`);
         } catch (error) {
             console.error('Error updating task:', error);
+        } finally {
+
+        }
+    }
+
+    const handleMarkAsDone = async (id) => {
+        setLoading(true);
+        try {
+            await markTaskAsDone(id);
+            const updatedData = await getAllTasks();
+            setUndoneTasks(updatedData);
+            console.log(`Task with ID ${id} marked done successfully`);
+        } catch (error) {
+            console.error('Error marking done task:', error);
         } finally {
 
         }
@@ -188,6 +204,18 @@ export default function AllTasks() {
                     >
                         Delete
                     </Button>
+                    {!record.done && <Button
+                        variant='filled'
+                        color='green'
+                        size="small"
+                        onClick={() => {
+                            console.log(record.id);
+                            handleMarkAsDone(record.id);
+                        }}
+                    >
+                        Mark as done
+                    </Button>}
+
                 </Space>
             ),
         },
@@ -206,7 +234,7 @@ export default function AllTasks() {
             }
         };
         fetchApi();
-    }, [loading]);
+    }, [loading, reloadTrigger]);
 
     return (
         <>

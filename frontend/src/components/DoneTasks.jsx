@@ -4,6 +4,7 @@ import { Button, Form, Input, Modal, Radio, Space, Table, Tag } from 'antd';
 import { deleteTask, getDoneTasks, getUndoneTasks, updateTask } from '../service/taskService';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
+import { useOutletContext } from 'react-router';
 
 const validationSchema = Yup.object({
     title: Yup.string()
@@ -25,6 +26,7 @@ export default function DoneTasks() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState({});
+    const { reloadTrigger } = useOutletContext();
     const formik = useFormik({
         initialValues: {
             title: selectedTask.title,
@@ -206,7 +208,7 @@ export default function DoneTasks() {
             }
         };
         fetchApi();
-    }, [loading]);
+    }, [loading, reloadTrigger]);
 
     return (
         <>
