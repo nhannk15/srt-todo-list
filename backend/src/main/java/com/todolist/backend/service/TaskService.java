@@ -29,12 +29,15 @@ public class TaskService {
         this.myUserRepository = myUserRepository;
     }
 
-    public void createNewTask(CreateTaskRequest request) {
-
-        String email = request.getEmail();
+    public void createNewTask(String email, CreateTaskRequest request) {
+        log.info("createNewTask() - user email: {}", email);
         String title = request.getTitle();
         String description = request.getDescription();
         Long priority = request.getPriority();
+        log.info("createNewTask() - title: {}", title);
+        log.info("createNewTask() - desciprion: {}", description);
+        log.info("createNewTask() - priority: {}", priority);
+
 
         MyUser user = myUserRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -78,6 +81,31 @@ public class TaskService {
         MyUser user = myUserRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Task> undoneTasks = taskRepository.findUserDoneTasks(user.getId());
+        List<TaskResponse> response = undoneTasks
+                .stream()
+                .map((task) -> {
+                    TaskResponse mappedTask = TaskResponse
+                            .builder()
+                            .id(task.getId())
+                            .title(task.getTitle())
+                            .description(task.getDescription())
+                            .priority(task.getPriority())
+                            .isDone(task.isDone())
+                            .isActive(task.isActive())
+                            .createdAt(task.getCreatedAt())
+                            .doneAt(task.getDoneAt())
+                            .build();
+                    return mappedTask;
+                })
+                .toList();
+        return response;
+    }
+
+    public List<TaskResponse> getAllTasks(String email) {
+        log.info("getAllTasks() - email: {}", email);
+        MyUser user = myUserRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Task> undoneTasks = taskRepository.findAllTasks(user.getId());
         List<TaskResponse> response = undoneTasks
                 .stream()
                 .map((task) -> {

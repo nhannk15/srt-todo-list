@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class CreateTaskRequest {
     
-    private String email;
     private String title;
     private String description;
     private Long priority;
